@@ -1,0 +1,28 @@
+Autor: Adam Wiktor
+
+Rozwiązanie zawiera zmodyfikowane pliki collect-neighbor.h
+i collect-neighbor.c, w których zmiany względem wersji oryginalnej zostały
+umieszczone w klauzuli:
+// __AGGREGATE__
+(nowe linie kodu)
+// __AGGREGATE__
+W tych plikach dodane zostały wartości zebrane z wierzchołków oraz informacje,
+czy dany wierzchołek jest naszym dzieckiem. Dodane zostały również funkcje
+pomocnicze do operowania na tych wartościach.
+
+Główna część rozwiązania zawiera się w plikach aggregate.h oraz aggregate.c.
+Szkielet rozwiązania został zaczerpnięty z collect.h i collect.c. Zmiana
+agregatu została zrealizowana przy pomocy netflood. Jeśli informacja
+o zmianie nie dotrze do danego wierzchołka, to jego rodzic ponowi wysyłanie
+netflood (z tym samym seqno aby wierzchołki, które już znają nowy agregat, nie
+propagowały go dalej). Jeśli dany wierzchołek będzie znał swoją wartość oraz
+wartości swoich dzieci, to wyśle wartość skumulowaną do swojego rodzica.
+Wartości przechowuję jako parę (value, counter), aby móc dokładnie policzyć
+średnią ze wszystkich wartości. Informację o byciu (albo przestaniu być)
+rodzicem dzieci wysyłają za pomocą tej samej kolejki, co odczyty, jednak na
+wypadek niedostarczenia informacji do starego rodzica, po 5 minutach zapomina on
+o danym dziecku, a nowy rodzic dodaje informację o nowym dziecku przy otrzymaniu
+pierwszego odczytu.
+
+Instalacja rozwiązania polega na dodaniu (lub nadpisaniu) plików źródłowych do
+katalogu contiki/core/net/rime.
